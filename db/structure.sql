@@ -26,16 +26,51 @@ CREATE TABLE public.ar_internal_metadata (
 
 
 --
+-- Name: authors; Type: TABLE; Schema: public; Owner: -
+--
+
+CREATE TABLE public.authors (
+    id bigint NOT NULL,
+    name character varying,
+    created_at timestamp(6) without time zone NOT NULL,
+    updated_at timestamp(6) without time zone NOT NULL
+);
+
+
+--
+-- Name: authors_id_seq; Type: SEQUENCE; Schema: public; Owner: -
+--
+
+CREATE SEQUENCE public.authors_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+--
+-- Name: authors_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
+--
+
+ALTER SEQUENCE public.authors_id_seq OWNED BY public.authors.id;
+
+
+--
 -- Name: recipes; Type: TABLE; Schema: public; Owner: -
 --
 
 CREATE TABLE public.recipes (
     id bigint NOT NULL,
     name character varying,
-    "time" integer,
+    total_time integer,
+    prep_time integer,
+    cook_time integer,
+    author_tip text,
     rate double precision,
     ingredients text,
     image text,
+    author_id bigint,
     created_at timestamp(6) without time zone NOT NULL,
     updated_at timestamp(6) without time zone NOT NULL,
     searchable tsvector GENERATED ALWAYS AS (to_tsvector('french'::regconfig, COALESCE(ingredients, ''::text))) STORED
@@ -71,6 +106,13 @@ CREATE TABLE public.schema_migrations (
 
 
 --
+-- Name: authors id; Type: DEFAULT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.authors ALTER COLUMN id SET DEFAULT nextval('public.authors_id_seq'::regclass);
+
+
+--
 -- Name: recipes id; Type: DEFAULT; Schema: public; Owner: -
 --
 
@@ -83,6 +125,14 @@ ALTER TABLE ONLY public.recipes ALTER COLUMN id SET DEFAULT nextval('public.reci
 
 ALTER TABLE ONLY public.ar_internal_metadata
     ADD CONSTRAINT ar_internal_metadata_pkey PRIMARY KEY (key);
+
+
+--
+-- Name: authors authors_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.authors
+    ADD CONSTRAINT authors_pkey PRIMARY KEY (id);
 
 
 --
@@ -102,10 +152,25 @@ ALTER TABLE ONLY public.schema_migrations
 
 
 --
+-- Name: index_recipes_on_author_id; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX index_recipes_on_author_id ON public.recipes USING btree (author_id);
+
+
+--
 -- Name: index_recipes_on_searchable; Type: INDEX; Schema: public; Owner: -
 --
 
 CREATE INDEX index_recipes_on_searchable ON public.recipes USING gin (searchable);
+
+
+--
+-- Name: recipes fk_rails_08ee84afe6; Type: FK CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.recipes
+    ADD CONSTRAINT fk_rails_08ee84afe6 FOREIGN KEY (author_id) REFERENCES public.authors(id);
 
 
 --
