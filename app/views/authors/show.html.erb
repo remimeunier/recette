@@ -1,9 +1,9 @@
 <p id="notice"><%= notice %></p>
-<h1>Recipes</h1>
-<%= form_tag(recipes_path, method: :get) do %>
-  <%= text_field_tag(:search, params[:search]) %>
-  <%= submit_tag("Search") %>
-<% end %>
+<p>
+  <strong>Author:</strong>
+  <%= @author.name %>
+</p>
+
 <table>
   <thead>
     <tr>
@@ -11,15 +11,15 @@
       <th>author</th>
       <th>Time</th>
       <th>Rate</th>
-      <th>Ingredients </th>
+      <th></th>
     </tr>
   </thead>
 
   <tbody>
-    <% @recipes.each do |recipe| %>
+    <% @author.recipes.each do |recipe| %>
       <tr>
         <td><%= link_to recipe.name, recipe %></td>
-        <td><%= link_to recipe.author.name, recipe.author %></td>
+        <td><%= recipe.author.name %></td>
         <td><%= recipe.prep_time %></td>
         <td><%= recipe.rate %></td>
         <td><%= recipe.ingredients %></td>
@@ -28,4 +28,4 @@
   </tbody>
 </table>
 
-<br>
+<%= link_to 'Back', recipes_path %>

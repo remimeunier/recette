@@ -2,10 +2,10 @@ class RecipesController < ApplicationController
   before_action :set_recipe, only: :show
 
   def index
-    unless params['search'] && params['search'] != ''
-      @recipes = Recipe.all.includes(:author)
+    if params['search'] && params['search'] != ''
+      @recipes = Recipe.search_recipes(search).includes(:author)
     else
-      @recipes = Recipe.search_recipes(params['search']).includes(:author)
+      @recipes = []
     end
   end
 
