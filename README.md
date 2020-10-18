@@ -1,24 +1,22 @@
 # README
 
-This README would normally document whatever steps are necessary to get the
-application up and running.
+Quick Recipes seacher for a challenge and to try out the Full Text Search provided by postgresql
 
-Things you may want to cover:
+Heroku link : https://stark-journey-64762.herokuapp.com/
 
-* Ruby version
+## User stories
 
-* System dependencies
+1 - As a User, I want a search function who allows me to search for recipes by entering ingredients I have in my fridge, so i can cook something for my friends
+2 - As a User with vegetarien friends, I want to be able to use this app and adding the "végétarien", so I can cook something for my vegetarian friends
+3 - As a User, I want to be able to look for all recipes from one user
+4 - As a User, I want to be able to look for all recipes with a common tag
 
-* Configuration
 
-* Database creation
+## Things to add
 
-* Database initialization
+- Add the ignoring accents feature of postgresql
+- Add a filter on preparation time and rate
 
-* How to run the test suite
+## DB structure
 
-* Services (job queues, cache servers, search engines, etc.)
-
-* Deployment instructions
-
-* ...
+See db/structure.sql

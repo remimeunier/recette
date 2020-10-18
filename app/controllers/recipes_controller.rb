@@ -3,7 +3,7 @@ class RecipesController < ApplicationController
 
   def index
     if params['search'] && params['search'] != ''
-      @recipes = Recipe.search_recipes(params['search']).includes(:author, :tags)
+      @recipes = Recipe.search_recipes(params['search']).includes(:author, :tags).page(params[:page])
     else
       @recipes = []
     end
