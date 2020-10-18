@@ -1,31 +1,43 @@
-<p id="notice"><%= notice %></p>
-<p>
-  <strong>Author:</strong>
-  <%= @author.name %>
-</p>
+<div class="container">
+  <p id="notice"><%= notice %></p>
+  <p>
+    <strong>Author:</strong>
+    <%= @author.name %>
+  </p>
 
-<table>
-  <thead>
-    <tr>
-      <th>Name</th>
-      <th>author</th>
-      <th>Time</th>
-      <th>Rate</th>
-      <th></th>
-    </tr>
-  </thead>
-
-  <tbody>
-    <% @author.recipes.each do |recipe| %>
+  <table class="table">
+    <thead>
       <tr>
-        <td><%= link_to recipe.name, recipe %></td>
-        <td><%= recipe.author.name %></td>
-        <td><%= recipe.prep_time %></td>
-        <td><%= recipe.rate %></td>
-        <td><%= recipe.ingredients %></td>
+        <th scope="col">Name</th>
+        <th scope="col">author</th>
+        <th scope="col">Time</th>
+        <th scope="col">Rate</th>
+        <th scope="col">Ingredients </th>
+        <th scope="col">tags </th>
       </tr>
-    <% end %>
-  </tbody>
-</table>
+    </thead>
+
+    <tbody>
+      <% @author.recipes.each do |recipe| %>
+        <tr>
+          <td scope="row"><%= link_to recipe.name, recipe %></td>
+          <td><%= link_to recipe.author.name, recipe.author %></td>
+          <td>
+          <% if recipe.total_time %>
+            <%= ChronicDuration.output(recipe.total_time) %>
+          <% end %>
+          </td>
+          <td><%= recipe.rate %></td>
+          <td><%= recipe.ingredients %></td>
+          <td>
+            <% recipe.tags.each do |tag| %>
+              <%= link_to tag.name, tag %>;
+            <% end %>
+          </td>
+        </tr>
+      <% end %>
+    </tbody>
+  </table>
+</div>
 
 <%= link_to 'Back', recipes_path %>

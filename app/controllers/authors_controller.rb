@@ -7,6 +7,6 @@ class AuthorsController < ApplicationController
   private
 
     def set_author
-      @author = Author.find(params[:id])
+      @author = Author.includes(recipes: [:tags, :author]).find(params[:id])
     end
 end

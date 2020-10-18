@@ -19,6 +19,7 @@
         <th scope="col">Time</th>
         <th scope="col">Rate</th>
         <th scope="col">Ingredients </th>
+        <th scope="col">tags </th>
       </tr>
     </thead>
 
@@ -34,6 +35,11 @@
           </td>
           <td><%= recipe.rate %></td>
           <td><%= recipe.ingredients %></td>
+          <td>
+            <% recipe.tags.each do |tag| %>
+              <%= link_to tag.name, tag %>;
+            <% end %>
+          </td>
         </tr>
       <% end %>
     </tbody>

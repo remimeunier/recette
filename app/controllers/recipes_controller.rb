@@ -3,8 +3,7 @@ class RecipesController < ApplicationController
 
   def index
     if params['search'] && params['search'] != ''
-      ChronicDuration.output(799)
-      @recipes = Recipe.search_recipes(params['search']).with_pg_search_highlight.includes(:author)
+      @recipes = Recipe.search_recipes(params['search']).includes(:author, :tags)
     else
       @recipes = []
     end

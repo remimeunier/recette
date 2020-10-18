@@ -6,6 +6,9 @@ class Recipe < ApplicationRecord
 
   pg_search_scope :search_recipes,
                   against: [:ingredients, :name],
+                  associated_against: {
+                    tags: :name
+                  },
                   #ignoring: :accents, # need postgresql extension
                   using: {
                     tsearch: {
@@ -14,8 +17,5 @@ class Recipe < ApplicationRecord
                       any_word: true,
                       prefix: true
                     }
-                  },
-                  associated_against: {
-                    tags: :name
                   }
 end

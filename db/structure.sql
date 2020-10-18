@@ -123,7 +123,8 @@ CREATE TABLE public.tags (
     id bigint NOT NULL,
     name character varying,
     created_at timestamp(6) without time zone NOT NULL,
-    updated_at timestamp(6) without time zone NOT NULL
+    updated_at timestamp(6) without time zone NOT NULL,
+    searchable tsvector GENERATED ALWAYS AS (to_tsvector('french'::regconfig, (COALESCE(name, ''::character varying))::text)) STORED
 );
 
 
@@ -236,6 +237,13 @@ CREATE INDEX index_recipes_tags_on_tag_id ON public.recipes_tags USING btree (ta
 
 
 --
+-- Name: index_tags_on_searchable; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX index_tags_on_searchable ON public.tags USING gin (searchable);
+
+
+--
 -- Name: recipes fk_rails_08ee84afe6; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
@@ -253,6 +261,8 @@ INSERT INTO "schema_migrations" (version) VALUES
 ('20201016125415'),
 ('20201016130117'),
 ('20201016131127'),
-('20201018161519');
+('20201018161519'),
+('20201018164302'),
+('20201018164425');
 
 
