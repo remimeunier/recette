@@ -73,7 +73,7 @@ CREATE TABLE public.recipes (
     author_id bigint,
     created_at timestamp(6) without time zone NOT NULL,
     updated_at timestamp(6) without time zone NOT NULL,
-    searchable tsvector GENERATED ALWAYS AS (to_tsvector('french'::regconfig, COALESCE(ingredients, ''::text))) STORED
+    searchable tsvector GENERATED ALWAYS AS ((to_tsvector('french'::regconfig, COALESCE(ingredients, ''::text)) || to_tsvector('french'::regconfig, (COALESCE(name, ''::character varying))::text))) STORED
 );
 
 
@@ -97,12 +97,53 @@ ALTER SEQUENCE public.recipes_id_seq OWNED BY public.recipes.id;
 
 
 --
+-- Name: recipes_tags; Type: TABLE; Schema: public; Owner: -
+--
+
+CREATE TABLE public.recipes_tags (
+    tag_id bigint,
+    recipe_id bigint
+);
+
+
+--
 -- Name: schema_migrations; Type: TABLE; Schema: public; Owner: -
 --
 
 CREATE TABLE public.schema_migrations (
     version character varying NOT NULL
 );
+
+
+--
+-- Name: tags; Type: TABLE; Schema: public; Owner: -
+--
+
+CREATE TABLE public.tags (
+    id bigint NOT NULL,
+    name character varying,
+    created_at timestamp(6) without time zone NOT NULL,
+    updated_at timestamp(6) without time zone NOT NULL
+);
+
+
+--
+-- Name: tags_id_seq; Type: SEQUENCE; Schema: public; Owner: -
+--
+
+CREATE SEQUENCE public.tags_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+--
+-- Name: tags_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
+--
+
+ALTER SEQUENCE public.tags_id_seq OWNED BY public.tags.id;
 
 
 --
@@ -117,6 +158,13 @@ ALTER TABLE ONLY public.authors ALTER COLUMN id SET DEFAULT nextval('public.auth
 --
 
 ALTER TABLE ONLY public.recipes ALTER COLUMN id SET DEFAULT nextval('public.recipes_id_seq'::regclass);
+
+
+--
+-- Name: tags id; Type: DEFAULT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.tags ALTER COLUMN id SET DEFAULT nextval('public.tags_id_seq'::regclass);
 
 
 --
@@ -152,6 +200,14 @@ ALTER TABLE ONLY public.schema_migrations
 
 
 --
+-- Name: tags tags_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.tags
+    ADD CONSTRAINT tags_pkey PRIMARY KEY (id);
+
+
+--
 -- Name: index_recipes_on_author_id; Type: INDEX; Schema: public; Owner: -
 --
 
@@ -163,6 +219,20 @@ CREATE INDEX index_recipes_on_author_id ON public.recipes USING btree (author_id
 --
 
 CREATE INDEX index_recipes_on_searchable ON public.recipes USING gin (searchable);
+
+
+--
+-- Name: index_recipes_tags_on_recipe_id; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX index_recipes_tags_on_recipe_id ON public.recipes_tags USING btree (recipe_id);
+
+
+--
+-- Name: index_recipes_tags_on_tag_id; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX index_recipes_tags_on_tag_id ON public.recipes_tags USING btree (tag_id);
 
 
 --
@@ -182,6 +252,7 @@ SET search_path TO "$user", public;
 INSERT INTO "schema_migrations" (version) VALUES
 ('20201016125415'),
 ('20201016130117'),
-('20201016131127');
+('20201016131127'),
+('20201018161519');
 
 

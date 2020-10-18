@@ -1,31 +1,41 @@
-<p id="notice"><%= notice %></p>
-<h1>Recipes</h1>
-<%= form_tag(recipes_path, method: :get) do %>
-  <%= text_field_tag(:search, params[:search]) %>
-  <%= submit_tag("Search") %>
-<% end %>
-<table>
-  <thead>
-    <tr>
-      <th>Name</th>
-      <th>author</th>
-      <th>Time</th>
-      <th>Rate</th>
-      <th>Ingredients </th>
-    </tr>
-  </thead>
-
-  <tbody>
-    <% @recipes.each do |recipe| %>
+<div class="container">
+  <p id="notice"><%= notice %></p>
+  <h1 class="text-center">Recettes</h1>
+  <%= form_tag(recipes_path, method: :get) do %>
+    <div class="form-group">
+       <label>Search : </label>
+      <%= text_field_tag(:search, params[:search], class: "form-control") %>
+      <small id="emailHelp" class="form-text text-muted">Enter a list of ingredients</small>
+    </div>
+    <%= submit_tag("Search", class: "btn btn-primary") %>
+  <% end %>
+  <br>
+  <br>
+  <table class="table">
+    <thead>
       <tr>
-        <td><%= link_to recipe.name, recipe %></td>
-        <td><%= link_to recipe.author.name, recipe.author %></td>
-        <td><%= recipe.prep_time %></td>
-        <td><%= recipe.rate %></td>
-        <td><%= recipe.ingredients %></td>
+        <th scope="col">Name</th>
+        <th scope="col">author</th>
+        <th scope="col">Time</th>
+        <th scope="col">Rate</th>
+        <th scope="col">Ingredients </th>
       </tr>
-    <% end %>
-  </tbody>
-</table>
+    </thead>
 
-<br>
+    <tbody>
+      <% @recipes.each do |recipe| %>
+        <tr>
+          <td scope="row"><%= link_to recipe.name, recipe %></td>
+          <td><%= link_to recipe.author.name, recipe.author %></td>
+          <td>
+          <% if recipe.total_time %>
+            <%= ChronicDuration.output(recipe.total_time) %>
+          <% end %>
+          </td>
+          <td><%= recipe.rate %></td>
+          <td><%= recipe.ingredients %></td>
+        </tr>
+      <% end %>
+    </tbody>
+  </table>
+</div>
