@@ -7,7 +7,7 @@ class RecipesController < ApplicationController
     else
       @recipes = Recipe.none
     end
-    @recipes = @recipes.page(params[:page])
+    set_filter
   end
 
   def show
@@ -19,8 +19,21 @@ class RecipesController < ApplicationController
       @recipe = Recipe.find(params[:id])
     end
 
+    def set_filter
+      if params['less_than'] && params['less_than'] != ''
+        # total_time in saved in secondes
+        @recipes = @recipes.where("total_time <= ?", params['less_than_minutes'].to_i * 60)
+      end
+      if params['rating_greater_than'] && params['rating_greater_than'] != ''
+        # with a rate greater than
+        @recipes = @recipes.where("rate >= ?", params['rating_greater_than'].to_f)
+      end
+      # for pagination
+      @recipes = @recipes.page(params[:page])
+    end
+
     # Only allow a list of trusted parameters through.
     def recipe_params
-      params.require(:recipe).permit(:search)
+      params.require(:recipe).permit(:search, :less_than_minutes, :rating_greater_than)
     end
 end

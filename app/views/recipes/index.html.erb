@@ -5,7 +5,16 @@
     <div class="form-group">
        <label>Search : </label>
       <%= text_field_tag(:search, params[:search], class: "form-control") %>
-      <small id="emailHelp" class="form-text text-muted">Enter a list of ingredients</small>
+      <small class="form-text text-muted">Enter a list of ingredients</small>
+    </div>
+    <div class="form-inline">
+      <label class=""> in less than : </label>
+      <%= number_field_tag(:less_than_minutes, params[:less_than_minutes], class: "form-control") %>
+      <small class="form-text text-muted"> minutes </small>
+    </div>
+    <div class="form-inline">
+      <label class=""> with a rating greater than : </label>
+      <%= number_field_tag(:rating_greater_than, params[:rating_greater_than], min: 1, max: 5, class: "form-control") %>
     </div>
     <%= submit_tag("Search", class: "btn btn-primary") %>
   <% end %>
