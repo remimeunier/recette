@@ -2,47 +2,27 @@ require 'test_helper'
 
 class RecipesControllerTest < ActionDispatch::IntegrationTest
   setup do
-    @recipe = recipes(:one)
+    @author = Author.create(name: "someone")
+    @r1 = Recipe.create(name: 'Lasagne Végétarienne', ingredients: 'Champignon pate',
+                        author: @author)
+    @r2 = Recipe.create(name: 'Lasagne', ingredients: 'Champignon champignon viande', author: @author)
   end
 
-  test "should get index" do
+  test "should get index and return empty recipes" do
     get recipes_url
     assert_response :success
+    assert !response.body.include?('Végétarienne')
+    assert !response.body.include?('viande')
+    assert !response.body.include?('pate')
+    assert !response.body.include?('someone')
   end
 
-  test "should get new" do
-    get new_recipe_url
+  test "should get index and return both recipes" do
+    get recipes_url params: { search: "Lasagne"}
     assert_response :success
-  end
-
-  test "should create recipe" do
-    assert_difference('Recipe.count') do
-      post recipes_url, params: { recipe: { image: @recipe.image, ingredients: @recipe.ingredients, name: @recipe.name, rate: @recipe.rate, time: @recipe.time } }
-    end
-
-    assert_redirected_to recipe_url(Recipe.last)
-  end
-
-  test "should show recipe" do
-    get recipe_url(@recipe)
-    assert_response :success
-  end
-
-  test "should get edit" do
-    get edit_recipe_url(@recipe)
-    assert_response :success
-  end
-
-  test "should update recipe" do
-    patch recipe_url(@recipe), params: { recipe: { image: @recipe.image, ingredients: @recipe.ingredients, name: @recipe.name, rate: @recipe.rate, time: @recipe.time } }
-    assert_redirected_to recipe_url(@recipe)
-  end
-
-  test "should destroy recipe" do
-    assert_difference('Recipe.count', -1) do
-      delete recipe_url(@recipe)
-    end
-
-    assert_redirected_to recipes_url
+    assert response.body.include?('Végétarienne')
+    assert response.body.include?('viande')
+    assert response.body.include?('pate')
+    assert response.body.include?('someone')
   end
 end
