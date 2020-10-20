@@ -14,11 +14,10 @@ Heroku link : https://stark-journey-64762.herokuapp.com/
 
 ## Things to add
 
-- Add a few test on recipe's model and controller
-- Add the ignoring accents feature of postgresql
-- Add a filter on preparation time and rate
-- Build a "Multi-search" style search and conpare result and querry eficiency
-- `negation: true` combine with `any_word` give unpredictable result : Open a PR on `pg_search` with a failing test
+- [X] Add a few test on recipe's model and controller
+- [ ] Add the ignoring accents feature of postgresql
+- [X] Add a filter on preparation time and rate
+- [ ] `negation: true` combine with `any_word` give unpredictable result : Open a PR on `pg_search` with a failing test
 
 ## DB structure
 

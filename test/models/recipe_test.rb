@@ -9,7 +9,7 @@ class RecipeTest < ActiveSupport::TestCase
   end
 
   test "search_recipes should return full singredient before double match on one word" do
-    r1 = Recipe.create(name: 'Lasagne', ingredients: 'Champignon champignon viande', author: @author)
+    r1 = Recipe.create(name: 'Lasagne', ingredients: 'Champignon Champignon Champignon champignon viande', author: @author)
     results =  Recipe.search_recipes('Champignon pate')
     assert results.first == @r2
     assert results.second == r1
